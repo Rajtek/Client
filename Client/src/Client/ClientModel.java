@@ -12,6 +12,7 @@ import Shared.Player;
  * @author Rajtek
  */
 public class ClientModel {
-    Player player = new Player();
+    Player player;
+    
     
 }

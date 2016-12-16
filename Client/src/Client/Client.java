@@ -5,15 +5,49 @@
  */
 package Client;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author Rajtek
  */
 public class Client {
+    
+    private static ClientModel createClientModel(){
+        return new ClientModel();
+    }
+    private static ClientControler createClientControler(ClientModel clientModel){
+        return new ClientControler(clientModel);
+    }
+    
+    private static ClientView createModelViewController(){
+        ClientModel m = createClientModel();
+        ClientControler c = createClientControler(m);
+        ClientView v = new ClientView();
+        v.setModel(m);
+        v.setController(c);
+        c.setView(v);
+        return v;
+    }
+    private static void createAndShowGUI(){
+        JFrame frame = new JFrame("Texas Holdem");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        ClientView v = createModelViewController();
+        frame.getContentPane().add(v);
+
+        frame.setSize(v.getSize());
+        frame.setVisible(true);
+
+        v.requestFocus();
+        
+        
+    }
      public static void main(String[] args) {
-         ClientView theView = new ClientView();
-         ClientModel theModel = new ClientModel();
-         ClientControler theControler = new ClientControler(theView, theModel);
-         theView.setVisible(true);
+        javax.swing.SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                createAndShowGUI();
+            }
+        });
      }
 }
