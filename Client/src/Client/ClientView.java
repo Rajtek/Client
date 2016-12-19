@@ -17,8 +17,8 @@ public class ClientView extends JPanel implements ClientViewInterface{
     private ClientModel clientModel;
     private ClientControler clientControler;
     
-    private JTextField addressTextField = new JTextField(10);
-    private JTextField portNumberField = new JTextField(5);
+    private JTextField addressTextField = new JTextField("127.0.0.1",10);
+    private JTextField portNumberField = new JTextField("50017",5);
     private JTextField loginField = new JTextField(10);
     public JButton sendButton = new JButton("Wyślij");
     private JLabel addressLabel = new JLabel("Podaj adres serwera i port");

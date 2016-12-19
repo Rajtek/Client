@@ -5,6 +5,7 @@
  */
 package Client;
 
+import Shared.Message;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
@@ -46,7 +47,8 @@ public class ClientControler {
         
         
         this.clientView.addLoginListener((ActionEvent e) -> {
-            connection.SendLogin(clientView.getLogin());
+            connection.SendMessage(new Message(connection.getSource()));
+            
         });
         
         
