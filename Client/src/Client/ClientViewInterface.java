@@ -12,10 +12,16 @@ import java.awt.event.ActionListener;
  * @author Rajtek
  */
 public interface ClientViewInterface {
+
     void setModel(ClientModel clientModel);
+
     void setController(ClientControler clientController);
+
     void displayErrorMessage(String errorMessage);
+
     String getAddress();
+
     String getPort();
+
     void addSendListener(ActionListener e);
 }

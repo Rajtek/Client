@@ -10,5 +10,5 @@ package Client;
  * @author Rajtek
  */
 public interface ClientControlerInterface {
-    
+
 }

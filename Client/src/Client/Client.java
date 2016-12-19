@@ -12,15 +12,16 @@ import javax.swing.JFrame;
  * @author Rajtek
  */
 public class Client {
-    
-    private static ClientModel createClientModel(){
+
+    private static ClientModel createClientModel() {
         return new ClientModel();
     }
-    private static ClientControler createClientControler(ClientModel clientModel){
+
+    private static ClientControler createClientControler(ClientModel clientModel) {
         return new ClientControler(clientModel);
     }
-    
-    private static ClientView createModelViewController(){
+
+    private static ClientView createModelViewController() {
         ClientModel m = createClientModel();
         ClientControler c = createClientControler(m);
         ClientView v = new ClientView();
@@ -29,7 +30,8 @@ public class Client {
         c.setView(v);
         return v;
     }
-    private static void createAndShowGUI(){
+
+    private static void createAndShowGUI() {
         JFrame frame = new JFrame("Texas Holdem");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -40,14 +42,14 @@ public class Client {
         frame.setVisible(true);
 
         v.requestFocus();
-        
-        
+
     }
-     public static void main(String[] args) {
+
+    public static void main(String[] args) {
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
             public void run() {
                 createAndShowGUI();
             }
         });
-     }
+    }
 }

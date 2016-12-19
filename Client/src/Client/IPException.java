@@ -10,8 +10,20 @@ package Client;
  * @author Rajtek
  */
 public class IPException extends Exception {
-    public IPException() { super(); }
-    public IPException(String message) { super(message); }
-    public IPException(String message, Throwable cause) { super(message, cause); }
-    public IPException(Throwable cause) { super(cause); }
+
+    public IPException() {
+        super();
+    }
+
+    public IPException(String message) {
+        super(message);
+    }
+
+    public IPException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public IPException(Throwable cause) {
+        super(cause);
+    }
 }
