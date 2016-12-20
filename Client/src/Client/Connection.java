@@ -8,6 +8,8 @@ package Client;
 import java.io.*;
 import java.net.*;
 import Shared.Message;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -27,8 +29,9 @@ public class Connection implements Runnable {
     private String threadName;
     private Socket sock;
     OutputStream os;
+    InputStream is;
     ObjectOutputStream oos;
-
+    ObjectInputStream ois;
     public Connection(String address, int port) throws IPException {
         if (!CheckIPv4(address)) {
             throw new IPException();
@@ -43,55 +46,49 @@ public class Connection implements Runnable {
         sock = new Socket(address, port);
         System.out.println("Nawiazalem polaczenie: " + sock);
         os = sock.getOutputStream();
+        is = sock.getInputStream();
         oos = new ObjectOutputStream(os);
-
+        ois = new ObjectInputStream(is);
     }
 
     @Override
     public void run() {
-
+        
         try {
 
-            //tworzenie strumieni danych pobieranych z klawiatury i dostarczanych do socketu 
-            BufferedReader klaw;
-            klaw = new BufferedReader(new InputStreamReader(System.in));
-            PrintWriter outp;
-            outp = new PrintWriter(sock.getOutputStream());
-
-            //komunikacja - czytanie danych z klawiatury i przekazywanie ich do strumienia
+            
             while (true) {
-                System.out.print("<Wysylamy:> ");
-                String str = klaw.readLine();
-                outp.println(str);
-                outp.flush();
-                if (str.equals("exit")) {
-                    break;
-                }
+                Shared.Message a;
+                a = (Shared.Message) ois.readObject();
+                System.out.println("<Nadeszlo:> " + a.getSource() + " " + sock.getRemoteSocketAddress());
+                
             }
             //zamykanie polaczenia                                                           
-            klaw.close();
-            outp.close();
-            sock.close();
+            
+            
 
         } catch (IOException ex) {
             System.err.println(ex);
-            t.interrupt();
+            
 
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
 
     }
 
-    public void SendLogin(String s) {
-
-        PrintWriter outp;
-        try {
-            outp = new PrintWriter(sock.getOutputStream());
-            outp.println(s);
-            outp.flush();
-        } catch (IOException ex) {
-            System.err.print(ex);
-        }
-    }
+//    public void SendLogin(String s) {
+//
+//        PrintWriter outp;
+//        try {
+//            outp = new PrintWriter(sock.getOutputStream());
+//            outp.println(s);
+//            outp.flush();
+//        } catch (IOException ex) {
+//            System.err.print(ex);
+//        }
+//    }
 
     public void SendMessage(Message m) {
         try {
