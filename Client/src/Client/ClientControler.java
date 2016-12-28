@@ -5,7 +5,7 @@
  */
 package Client;
 
-import Shared.Message;
+import Shared.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 
@@ -13,7 +13,7 @@ import java.io.IOException;
  *
  * @author Rajtek
  */
-public class ClientControler {
+public class ClientControler implements SocketListener {
 
     private ClientView clientView;
     private ClientModel clientModel;
@@ -34,6 +34,7 @@ public class ClientControler {
                 port = Integer.parseInt(clientView.getPort());
                 connection = new Connection(address, port);
                 connection.connect();
+                connection.addListener(this);
                 t = connection.start();
                 clientView.showLoginPanel();
 
@@ -48,10 +49,32 @@ public class ClientControler {
         });
 
         this.clientView.addLoginListener((ActionEvent e) -> {
-            connection.SendMessage(new Message(connection.getSource()));
-
+            String login=clientView.getLogin();
+            if (login.length() < 3) {
+                clientView.displayErrorMessage("Za krótki login");
+            } else {
+                
+                connection.SendMessage(new MessageLogin(connection.getSource(), login));
+            }
         });
 
+    }
+
+    @Override
+    public void getMessage(Message msg) {
+
+        if (msg instanceof MessageLoginFailed) {
+            clientView.displayErrorMessage("Podany login jest już zajęty");
+        }
+       else if (msg instanceof MessageLoginSuccessful) {
+            clientView.setLogin(clientView.getLogin());
+            clientView.showLobbyPanel();
+            }
+       else if (msg instanceof MessageGetTablesList) {
+           clientView.setTablesList(((MessageGetTablesList) msg).getTablesList());
+       }
+        
+        System.out.println(msg.getSource() + " z kontroloera");
     }
 
 }

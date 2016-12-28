@@ -9,17 +9,8 @@ package Shared;
  *
  * @author Rajtek
  */
-public class Player{
-
-    private String login;
-    private int cash;
-
-    public Player(String login) {
-        this.login = login;
-        cash=25000;
-    }
-
-    public String getLogin() {
-        return login;
+public class MessageLoginSuccessful extends Message{
+    public MessageLoginSuccessful(String source) {
+        super(source);
     }
 }

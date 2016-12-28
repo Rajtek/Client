@@ -6,12 +6,12 @@
             <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/ClientControler.java</file>
             <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Message.java</file>
             <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/ClientViewInterface.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/ClientControlerInterface.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Hand.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/MessageLoginSuccessful.java</file>
             <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/Connection.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/Client.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/SocketListener.java</file>
             <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/ClientModel.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Card.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/Client.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/LoginMessage.java</file>
             <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/IPException.java</file>
             <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/ClientView.java</file>
             <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Player.java</file>

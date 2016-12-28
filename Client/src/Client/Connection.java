@@ -10,7 +10,8 @@ import java.net.*;
 import Shared.Message;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author Rajtek
@@ -28,10 +29,12 @@ public class Connection implements Runnable {
     public Thread t;
     private String threadName;
     private Socket sock;
-    OutputStream os;
-    InputStream is;
-    ObjectOutputStream oos;
-    ObjectInputStream ois;
+    private OutputStream os;
+    private InputStream is;
+    private ObjectOutputStream oos;
+    private ObjectInputStream ois;
+    private List<SocketListener> listeners = new ArrayList<>();
+
     public Connection(String address, int port) throws IPException {
         if (!CheckIPv4(address)) {
             throw new IPException();
@@ -39,7 +42,7 @@ public class Connection implements Runnable {
         this.address = address;
         this.port = port;
         threadName = "connection";
-
+        
     }
 
     public void connect() throws IOException {
@@ -53,28 +56,23 @@ public class Connection implements Runnable {
 
     @Override
     public void run() {
-        
+
         try {
 
-            
             while (true) {
                 Shared.Message a;
                 a = (Shared.Message) ois.readObject();
-                System.out.println("<Nadeszlo:> " + a.getSource() + " " + sock.getRemoteSocketAddress());
-                
+                //System.out.println("<Nadeszlo:> " + a.getSource() + " " + sock.getRemoteSocketAddress());
+                notifyListener(a);
             }
             //zamykanie polaczenia                                                           
-            
-            
 
         } catch (IOException ex) {
             System.err.println(ex);
-            
 
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
 
     }
 
@@ -89,11 +87,10 @@ public class Connection implements Runnable {
 //            System.err.print(ex);
 //        }
 //    }
-
     public void SendMessage(Message m) {
         try {
 
-            oos.writeObject(new Message(sock.getLocalAddress().toString()));
+            oos.writeObject(m);
 
         } catch (IOException ex) {
             System.err.print(ex);
@@ -113,5 +110,15 @@ public class Connection implements Runnable {
 
         return sock.getLocalSocketAddress().toString();
     }
+    
+   public void addListener(SocketListener toAdd){
+       listeners.add(toAdd);
+   }
+   
+   private void notifyListener(Shared.Message msg){
+       for (SocketListener s : listeners){
+           s.getMessage(msg);
+       }
+   }
 
 }
