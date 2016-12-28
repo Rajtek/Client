@@ -13,6 +13,14 @@ import Shared.Player;
  */
 public class ClientModel {
     Player player;
+
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
     
     
 }

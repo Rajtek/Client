@@ -5,11 +5,13 @@
  */
 package Shared;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Rajtek
  */
-public class Player{
+public class Player implements Serializable{
 
     private String login;
     private int cash;
@@ -21,5 +23,9 @@ public class Player{
 
     public String getLogin() {
         return login;
+    }
+
+    public int getCash() {
+        return cash;
     }
 }

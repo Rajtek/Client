@@ -66,9 +66,11 @@ public class ClientControler implements SocketListener {
         if (msg instanceof MessageLoginFailed) {
             clientView.displayErrorMessage("Podany login jest już zajęty");
         }
-       else if (msg instanceof MessageLoginSuccessful) {
-            clientView.setLogin(clientView.getLogin());
+       else if (msg instanceof MessageLoginSuccessful) {    
             clientView.showLobbyPanel();
+            clientModel.setPlayer(((MessageLoginSuccessful) msg).getPlayer());
+            clientView.setLobbyLogin(clientModel.getPlayer().getLogin());
+            clientView.setLobbyCash(clientModel.getPlayer().getCash());
             }
        else if (msg instanceof MessageGetTablesList) {
            clientView.setTablesList(((MessageGetTablesList) msg).getTablesList());

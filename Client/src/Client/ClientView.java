@@ -5,11 +5,12 @@
  */
 package Client;
 
+import Client.GUIpannels.*;
 import Shared.Table;
-import java.awt.*;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.util.List;
+
 /**
  *
  * @author Rajtek
@@ -19,75 +20,52 @@ public class ClientView extends JPanel implements ClientViewInterface {
     private ClientModel clientModel;
     private ClientControler clientControler;
 
-    private JTextField addressTextField = new JTextField("127.0.0.1", 10);
-    private JTextField portNumberField = new JTextField("50017", 5);
-    private JTextField loginField = new JTextField(10);
-    public JButton sendButton = new JButton("Wyślij");
-    private JLabel addressLabel = new JLabel("Podaj adres serwera i port");
-    private JLabel sepLabel = new JLabel(":");
-    public JPanel addressPanel;
-    public JPanel lobbyPanel= new JPanel();
-    public JPanel loginPanel = new JPanel();
-    public JButton loginButton = new JButton("Wyślij");
-    private JLabel loginLabel = new JLabel("login:");
-    private JLabel lobbyLabel = new JLabel("No kurwa gratulację XD");
+    
+    
+    private ConnectionJPanel connectionJPanel= new ConnectionJPanel();
+    private LoginJPanel loginJPanel=new LoginJPanel();
+    private LobbyJPanel lobbyJPanel=new LobbyJPanel();
     
     private JList tablesList = new JList();
     
     public ClientView() {
         setSize(800, 600);
         setFocusable(true);
-        addressPanel = new JPanel();
-        addressPanel.add(addressLabel);
-        addressPanel.add(addressLabel);
-        addressPanel.add(addressTextField);
-        addressPanel.add(sepLabel);
-        addressPanel.add(portNumberField);
-        addressPanel.add(sendButton);
-        this.add(addressPanel);
+        
+        this.add(connectionJPanel);
+        this.add(loginJPanel);
+        this.add(lobbyJPanel);
+        connectionJPanel.setVisible(true);
+        loginJPanel.setVisible(false);
+        
 
-        loginPanel.add(loginLabel);
-        loginPanel.add(loginField);
-        loginPanel.add(loginButton);
 
-        this.add(loginPanel);
-        
-        loginPanel.setVisible(false);
-        
-        GridLayout lobbyLayout = new GridLayout(0,2);
-        lobbyPanel.setLayout(lobbyLayout);
-        lobbyPanel.add(tablesList);
-        lobbyPanel.add(lobbyLabel);
-        
-        
-        
-        
+
         tablesList.setLayoutOrientation(JList.VERTICAL);
-        //lobbyLayout.addLayoutComponent("Tables List", tablesList);
-        
-        
-        this.add(lobbyPanel);
-        lobbyPanel.setVisible(false);
-        
+        tablesList.setVisibleRowCount(50);
+
+
+
     }
 
     @Override
     public String getAddress() {
-        return addressTextField.getText();
+        return connectionJPanel.getAddress();//addressTextField.getText();
     }
 
     @Override
     public String getPort() {
-        return portNumberField.getText();
+        return connectionJPanel.getPort();
     }
 
     @Override
     public void addSendListener(ActionListener listenForSendButton) {
-        sendButton.addActionListener(listenForSendButton);
+        connectionJPanel.getSendButton().addActionListener(listenForSendButton);
+        
     }
 
     public void addLoginListener(ActionListener listenForLoginButton) {
-        loginButton.addActionListener(listenForLoginButton);
+        loginJPanel.getLoginButton().addActionListener(listenForLoginButton);
     }
 
     @Override
@@ -95,23 +73,28 @@ public class ClientView extends JPanel implements ClientViewInterface {
         JOptionPane.showMessageDialog(this, errorMessage);
     }
 
-    String getLogin() {
-        return loginField.getText();
+    void setLobbyLogin(String login){
+        lobbyJPanel.setLogin(login);
     }
-
+    void setLobbyCash(int cash){
+        lobbyJPanel.setCash(cash);
+    }
+    String getLogin(){
+        return loginJPanel.getLogin();
+    }
     void showLoginPanel() {
 
-        addressPanel.setVisible(false);
-        loginPanel.setVisible(true);
+        connectionJPanel.setVisible(false);
+        loginJPanel.setVisible(true);
     }
-    
-    void showLobbyPanel(){
-        loginPanel.setVisible(false);
-        lobbyPanel.setVisible(true);
+
+    void showLobbyPanel() {
+        loginJPanel.setVisible(false);
+        lobbyJPanel.setVisible(true);
     }
-    public void setLogin(String login){
-        lobbyLabel.setText(lobbyLabel.getText()+" "+login);
-    }
+//    public void setLogin(String login){
+//        
+//    }
 
     @Override
     public void setModel(ClientModel m) {
@@ -122,15 +105,33 @@ public class ClientView extends JPanel implements ClientViewInterface {
     public void setController(ClientControler c) {
         this.clientControler = c;
     }
-   
-    public void setTablesList(List<Table> tablesList){
+    private String formatTableInfo(Table table){
+        String temp="#";
+        //VisibleString[i] = "#" + table.getId() + " blind: " + table.getBlind() + "$/" + table.getBlind() * 2 + "$ graczy/graczy.max:" + table.getNumberOfPlayers() + "/" + table.getMaxPlayers() + " ";
+        temp+=table.getId();
+        while(temp.length()<5)
+            temp+=" ";
+        temp+="| "+table.getBlind() + "$/" + table.getBlind() * 2 + "$";
+        while(temp.length()<27)
+            temp+=" ";
+        temp+="| "+table.getNumberOfPlayers() + "/" + table.getMaxPlayers();
+        
+        
+        return temp;
+    }
+    public void setTablesList(List<Table> tablesList) {
         String[] VisibleString = new String[tablesList.size()];
-        int i=0;
-        for (Table table : tablesList) {
-            VisibleString[i]="#"+table.getId()+" blind: "+table.getBlind()+"/"+table.getBlind()*2+"$ "+table.getNumberOfPlayers()+"/"+table.getMaxPlayers()+" "+ 
+        int i = 0;
+        for (Table table : tablesList) { 
+            VisibleString[i] = formatTableInfo(table);
+            
+            
             i++;
         }
         
-        this.tablesList.setListData(VisibleString);
+        lobbyJPanel.getTablesList().setListData(VisibleString);
     }
+    
+    
+    
 }
