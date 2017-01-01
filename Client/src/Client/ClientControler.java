@@ -5,9 +5,11 @@
  */
 package Client;
 
-import Shared.*;
+import Shared.Messages.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
+import javax.swing.event.ListSelectionEvent;
+import Shared.Player;
 
 /**
  *
@@ -49,13 +51,35 @@ public class ClientControler implements SocketListener {
         });
 
         this.clientView.addLoginListener((ActionEvent e) -> {
-            String login=clientView.getLogin();
+            String login = clientView.getLogin();
             if (login.length() < 3) {
                 clientView.displayErrorMessage("Za krótki login");
             } else {
-                
+
                 connection.SendMessage(new MessageLogin(connection.getSource(), login));
             }
+        });
+        this.clientView.addListSelectionListener((ListSelectionEvent evt) -> {
+            if (!evt.getValueIsAdjusting()) {
+
+                try {
+                    connection.SendMessage(new MessageAskAboutTable(connection.getSource(), clientView.getSelectedTableID()));
+                } catch (NoItemSelectedException ex) {}
+
+            }
+        });
+
+        this.clientView.addJoinListener((ActionEvent e) -> {
+
+            try {
+                connection.SendMessage(new MessageJoinTable(connection.getSource(), clientView.getSelectedTableID()));
+                
+                clientView.showTablePanel();
+
+            } catch (NoItemSelectedException ex) {
+
+            }
+
         });
 
     }
@@ -65,18 +89,47 @@ public class ClientControler implements SocketListener {
 
         if (msg instanceof MessageLoginFailed) {
             clientView.displayErrorMessage("Podany login jest już zajęty");
-        }
-       else if (msg instanceof MessageLoginSuccessful) {    
+        } else if (msg instanceof MessageLoginSuccessful) {
             clientView.showLobbyPanel();
             clientModel.setPlayer(((MessageLoginSuccessful) msg).getPlayer());
             clientView.setLobbyLogin(clientModel.getPlayer().getLogin());
             clientView.setLobbyCash(clientModel.getPlayer().getCash());
+            clientView.setTablesList(((MessageLoginSuccessful) msg).getTablesList());
+
+        } else if (msg instanceof MessageTablesList) {
+            clientView.setTablesList(((MessageTablesList) msg).getTablesList());
+
+        } else if (msg instanceof MessagePlayerList) {
+            int maxPlayers = ((MessagePlayerList) msg).getMaxPlayers();
+            Player[] playerlist = ((MessagePlayerList) msg).getPlayersList();
+            String s = "<html>";
+            clientView.setCanJoin(false);
+
+            for (int i = 0; i < maxPlayers; i++) {
+                if (playerlist[i] == null) {
+                    clientView.setCanJoin(true);
+                    break;
+                }
             }
-       else if (msg instanceof MessageGetTablesList) {
-           clientView.setTablesList(((MessageGetTablesList) msg).getTablesList());
-       }
-        
-        System.out.println(msg.getSource() + " z kontroloera");
+
+            for (int i = 0; i < maxPlayers; i++) {
+                if (playerlist[i] != null) {
+                    s += playerlist[i].getLogin() + " " + playerlist[i].getCash() + "$<br/>";
+                }
+            }
+            s += "</html>";
+            clientView.setTableInfo(s);
+        } else if (msg instanceof MessagePlayersOnTable){
+            int maxPlayers = ((MessagePlayersOnTable) msg).getMaxPlayers();
+            Player[] playerlist = ((MessagePlayersOnTable) msg).getPlayersList();
+            
+            
+            clientView.addPlayersToTable(playerlist);
+                
+            
+            
+        }
+
     }
 
 }

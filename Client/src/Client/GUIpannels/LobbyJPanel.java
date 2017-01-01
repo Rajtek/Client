@@ -5,8 +5,11 @@
  */
 package Client.GUIpannels;
 
-import javax.swing.JLabel;
+
+import javax.swing.AbstractListModel;
+import javax.swing.JButton;
 import javax.swing.JList;
+import Client.NoItemSelectedException;
 
 /**
  *
@@ -19,18 +22,37 @@ public class LobbyJPanel extends javax.swing.JPanel {
      */
     public LobbyJPanel() {
         initComponents();
+        
+        
     }
-
+    
+    public JButton getJoinButton() {
+        return joinButton;
+    }
+    public int getTableID() throws NoItemSelectedException{
+        String s=tablesList.getSelectedValue();
+        if(s==null) throw new NoItemSelectedException();
+        s=s.substring(1, 5);
+        s=s.trim();
+        return Integer.parseInt(s);
+    }
     public void setLogin(String login){
         loginLabel.setText("Login: "+login);
     }
     public void setCash(Integer cash){
         cashLabel.setText("Cash: " + cash.toString());
     } 
+    public void setTableInfo(String info){
+        tablePlayersLabel.setText(info);
+    }
     
     public JList<String> getTablesList() {
         return tablesList;
     }
+    public void setListModel(AbstractListModel e){
+       tablesList.setModel(e);
+    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,6 +70,9 @@ public class LobbyJPanel extends javax.swing.JPanel {
         cashLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        joinButton = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tablePlayersLabel = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(800, 600));
 
@@ -89,6 +114,18 @@ public class LobbyJPanel extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel2.setText("Dostępne stoły:");
 
+        joinButton.setText("Połącz");
+        joinButton.setEnabled(false);
+
+        jScrollPane2.setPreferredSize(new java.awt.Dimension(100, 200));
+
+        tablePlayersLabel.setBackground(new java.awt.Color(250, 250, 250));
+        tablePlayersLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        tablePlayersLabel.setBorder(javax.swing.BorderFactory.createTitledBorder("Gacze online:"));
+        tablePlayersLabel.setMinimumSize(new java.awt.Dimension(12, 203));
+        tablePlayersLabel.setOpaque(true);
+        jScrollPane2.setViewportView(tablePlayersLabel);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -96,26 +133,36 @@ public class LobbyJPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jScrollPane1)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 219, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(joinButton)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(33, 33, 33)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 338, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 338, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(joinButton)))
                 .addContainerGap(186, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -126,7 +173,12 @@ public class LobbyJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton joinButton;
     private javax.swing.JLabel loginLabel;
+    private javax.swing.JLabel tablePlayersLabel;
     private javax.swing.JList<String> tablesList;
     // End of variables declaration//GEN-END:variables
+    
+    
 }

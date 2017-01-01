@@ -6,10 +6,12 @@
 package Client;
 
 import Client.GUIpannels.*;
+import Shared.Player;
 import Shared.Table;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.util.List;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -25,8 +27,9 @@ public class ClientView extends JPanel implements ClientViewInterface {
     private ConnectionJPanel connectionJPanel= new ConnectionJPanel();
     private LoginJPanel loginJPanel=new LoginJPanel();
     private LobbyJPanel lobbyJPanel=new LobbyJPanel();
+    private TableJPanel tableJPanel=new TableJPanel();
+    public DefaultListModel listModel;
     
-    private JList tablesList = new JList();
     
     public ClientView() {
         setSize(800, 600);
@@ -35,19 +38,12 @@ public class ClientView extends JPanel implements ClientViewInterface {
         this.add(connectionJPanel);
         this.add(loginJPanel);
         this.add(lobbyJPanel);
+        this.add(tableJPanel);
         connectionJPanel.setVisible(true);
         loginJPanel.setVisible(false);
-        
-
-
-
-        tablesList.setLayoutOrientation(JList.VERTICAL);
-        tablesList.setVisibleRowCount(50);
-
-
 
     }
-
+    
     @Override
     public String getAddress() {
         return connectionJPanel.getAddress();//addressTextField.getText();
@@ -63,11 +59,26 @@ public class ClientView extends JPanel implements ClientViewInterface {
         connectionJPanel.getSendButton().addActionListener(listenForSendButton);
         
     }
+    public void addJoinListener(ActionListener listenForJoinButton){
+        lobbyJPanel.getJoinButton().addActionListener(listenForJoinButton);
+    }
+    
+    public void setTableInfo(String s){
+        lobbyJPanel.setTableInfo(s);
+    }
+    public void addListValueListener(ListSelectionListener listSelectionListener){
+        lobbyJPanel.getTablesList().addListSelectionListener(listSelectionListener);
+    }
 
     public void addLoginListener(ActionListener listenForLoginButton) {
         loginJPanel.getLoginButton().addActionListener(listenForLoginButton);
     }
-
+    public void addListSelectionListener(ListSelectionListener listener){
+        lobbyJPanel.getTablesList().addListSelectionListener(listener);
+    }
+    
+    
+    
     @Override
     public void displayErrorMessage(String errorMessage) {
         JOptionPane.showMessageDialog(this, errorMessage);
@@ -82,19 +93,30 @@ public class ClientView extends JPanel implements ClientViewInterface {
     String getLogin(){
         return loginJPanel.getLogin();
     }
+    public int getSelectedTableID() throws NoItemSelectedException{
+        return lobbyJPanel.getTableID();
+    }
     void showLoginPanel() {
 
         connectionJPanel.setVisible(false);
         loginJPanel.setVisible(true);
     }
-
+    void showTablePanel(){
+        tableJPanel.setVisible(true);
+        lobbyJPanel.setVisible(false);
+        
+    }
     void showLobbyPanel() {
         loginJPanel.setVisible(false);
         lobbyJPanel.setVisible(true);
+        listModel=new DefaultListModel();
+        lobbyJPanel.getTablesList().setModel(listModel);
+        
     }
-//    public void setLogin(String login){
-//        
-//    }
+    
+    void addPlayersToTable(Player[] players){
+        tableJPanel.setPlayers(players);
+    }
 
     @Override
     public void setModel(ClientModel m) {
@@ -120,16 +142,22 @@ public class ClientView extends JPanel implements ClientViewInterface {
         return temp;
     }
     public void setTablesList(List<Table> tablesList) {
-        String[] VisibleString = new String[tablesList.size()];
+        //String[] VisibleString = new String[tablesList.size()];
         int i = 0;
+        listModel.clear();
         for (Table table : tablesList) { 
-            VisibleString[i] = formatTableInfo(table);
-            
+            listModel.addElement(formatTableInfo(table));
             
             i++;
         }
-        
-        lobbyJPanel.getTablesList().setListData(VisibleString);
+        lobbyJPanel.getTablesList().setModel(listModel);
+        lobbyJPanel.getTablesList().ensureIndexIsVisible(0);
+    }
+
+    
+    void setCanJoin(boolean b) {
+       
+       lobbyJPanel.getJoinButton().setEnabled(b);
     }
     
     

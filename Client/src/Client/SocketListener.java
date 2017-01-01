@@ -10,5 +10,5 @@ package Client;
  * @author Rajtek
  */
 public interface SocketListener {
-    void getMessage(Shared.Message msg);
+    void getMessage(Shared.Messages.Message msg);
 }

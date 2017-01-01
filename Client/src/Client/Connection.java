@@ -7,7 +7,8 @@ package Client;
 
 import java.io.*;
 import java.net.*;
-import Shared.Message;
+import Shared.Messages.Message;
+import static java.lang.Thread.sleep;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.ArrayList;
@@ -60,10 +61,16 @@ public class Connection implements Runnable {
         try {
 
             while (true) {
-                Shared.Message a;
-                a = (Shared.Message) ois.readObject();
+                Shared.Messages.Message a;
+                a = (Shared.Messages.Message) ois.readObject();
                 //System.out.println("<Nadeszlo:> " + a.getSource() + " " + sock.getRemoteSocketAddress());
+//                try {
+//                        sleep(1000);
+//                    } catch (InterruptedException ex) {
+//                        
+//                    }
                 notifyListener(a);
+               
             }
             //zamykanie polaczenia                                                           
 
@@ -115,7 +122,7 @@ public class Connection implements Runnable {
        listeners.add(toAdd);
    }
    
-   private void notifyListener(Shared.Message msg){
+   private void notifyListener(Shared.Messages.Message msg){
        for (SocketListener s : listeners){
            s.getMessage(msg);
        }

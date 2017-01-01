@@ -3,18 +3,30 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="2"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/ClientControler.java</file>
             <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/GUIpannels/ConnectionJPanel.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/SocketListener.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/Connection.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/MessageLogin.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Message.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Messages/MessageLogin.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Messages/MessageLoginSuccessful.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/NoItemSelectedException.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/GUIpannels/TableJPanel.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Table.java</file>
             <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/ClientViewInterface.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/MessageLoginSuccessful.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/GUIpannels/LobbyJPanel.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/ClientModel.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Colors.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Messages/MessagePlayerList.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/Client.java</file>
             <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/GUIpannels/LoginJPanel.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/ClientControler.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/Connection.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Hand.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/GUIpannels/LobbyJPanel.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Messages/MessageAskAboutTable.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/GUIpannels/PlayerJPanel.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/ClientModel.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Messages/MessageJoinTable.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Messages/MessagePlayersOnTable.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Card.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Messages/MessageTablesList.java</file>
             <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/ClientView.java</file>
+            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Messages/Message.java</file>
             <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Shared/Player.java</file>
         </group>
     </open-files>
