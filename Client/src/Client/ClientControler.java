@@ -9,13 +9,17 @@ import Shared.Messages.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import javax.swing.event.ListSelectionEvent;
-import Shared.Player;
+import Shared.Model.Player;
+import Shared.Model.Table;
+import java.util.List;
+import Shared.Model.ControlerInterface;
+
 
 /**
  *
  * @author Rajtek
  */
-public class ClientControler implements SocketListener {
+public class ClientControler implements SocketListener, ControlerInterface, ModelListener {
 
     private ClientView clientView;
     private ClientModel clientModel;
@@ -24,11 +28,14 @@ public class ClientControler implements SocketListener {
 
     public ClientControler(ClientModel clientModel) {
         this.clientModel = clientModel;
+        clientModel.addListener(this);
+
     }
 
     void setView(ClientView v) {
-        this.clientView = v;
-        this.clientView.addSendListener((ActionEvent e) -> {
+        clientView = v;
+
+        clientView.addSendListener((ActionEvent e) -> {
             String address;
             int port;
             address = clientView.getAddress();
@@ -37,6 +44,7 @@ public class ClientControler implements SocketListener {
                 connection = new Connection(address, port);
                 connection.connect();
                 connection.addListener(this);
+
                 t = connection.start();
                 clientView.showLoginPanel();
 
@@ -50,7 +58,7 @@ public class ClientControler implements SocketListener {
 
         });
 
-        this.clientView.addLoginListener((ActionEvent e) -> {
+        clientView.addLoginListener((ActionEvent e) -> {
             String login = clientView.getLogin();
             if (login.length() < 3) {
                 clientView.displayErrorMessage("Za krótki login");
@@ -59,21 +67,22 @@ public class ClientControler implements SocketListener {
                 connection.SendMessage(new MessageLogin(connection.getSource(), login));
             }
         });
-        this.clientView.addListSelectionListener((ListSelectionEvent evt) -> {
+        clientView.addListSelectionListener((ListSelectionEvent evt) -> {
             if (!evt.getValueIsAdjusting()) {
 
                 try {
                     connection.SendMessage(new MessageAskAboutTable(connection.getSource(), clientView.getSelectedTableID()));
-                } catch (NoItemSelectedException ex) {}
+                } catch (NoItemSelectedException ex) {
+                }
 
             }
         });
 
-        this.clientView.addJoinListener((ActionEvent e) -> {
+        clientView.addJoinListener((ActionEvent e) -> {
 
             try {
                 connection.SendMessage(new MessageJoinTable(connection.getSource(), clientView.getSelectedTableID()));
-                
+
                 clientView.showTablePanel();
 
             } catch (NoItemSelectedException ex) {
@@ -81,55 +90,134 @@ public class ClientControler implements SocketListener {
             }
 
         });
+        
+        clientView.addCallListener((ActionEvent e) -> {
+            
+           
 
+        });
+        
+        clientView.addCheckListener((ActionEvent e) -> {
+
+           
+
+        });
+        
+        clientView.addFoldListener((ActionEvent e) -> {
+
+           
+
+        });
     }
 
     @Override
     public void getMessage(Message msg) {
+        msg.performAction(this);
+        System.out.println(msg.getClass());
+    }
 
-        if (msg instanceof MessageLoginFailed) {
-            clientView.displayErrorMessage("Podany login jest już zajęty");
-        } else if (msg instanceof MessageLoginSuccessful) {
-            clientView.showLobbyPanel();
-            clientModel.setPlayer(((MessageLoginSuccessful) msg).getPlayer());
-            clientView.setLobbyLogin(clientModel.getPlayer().getLogin());
-            clientView.setLobbyCash(clientModel.getPlayer().getCash());
-            clientView.setTablesList(((MessageLoginSuccessful) msg).getTablesList());
+    @Override
+    public void reactToMessageLoginFailed() {
+        clientView.displayErrorMessage("Podany login jest już zajęty");
+    }
 
-        } else if (msg instanceof MessageTablesList) {
-            clientView.setTablesList(((MessageTablesList) msg).getTablesList());
+    @Override
+    public void reactToMessageLoginSuccessful(Player player, List<Table> tablesList) {
+        clientModel.setPlayer(player);
+        clientModel.setTablesList(tablesList);
 
-        } else if (msg instanceof MessagePlayerList) {
-            int maxPlayers = ((MessagePlayerList) msg).getMaxPlayers();
-            Player[] playerlist = ((MessagePlayerList) msg).getPlayersList();
-            String s = "<html>";
-            clientView.setCanJoin(false);
-
-            for (int i = 0; i < maxPlayers; i++) {
-                if (playerlist[i] == null) {
-                    clientView.setCanJoin(true);
-                    break;
-                }
-            }
-
-            for (int i = 0; i < maxPlayers; i++) {
-                if (playerlist[i] != null) {
-                    s += playerlist[i].getLogin() + " " + playerlist[i].getCash() + "$<br/>";
-                }
-            }
-            s += "</html>";
-            clientView.setTableInfo(s);
-        } else if (msg instanceof MessagePlayersOnTable){
-            int maxPlayers = ((MessagePlayersOnTable) msg).getMaxPlayers();
-            Player[] playerlist = ((MessagePlayersOnTable) msg).getPlayersList();
-            
-            
-            clientView.addPlayersToTable(playerlist);
-                
-            
-            
-        }
+        clientView.showLobbyPanel();
 
     }
 
+    @Override
+    public void reactToMessageTablesList(List<Table> tablesList) {
+        clientModel.setTablesList(tablesList);
+
+    }
+
+    @Override
+    public void reactToMessagePlayerList(Player[] playerList, int maxPlayers, int id) {
+        clientView.setTableInfo(" ");
+        try {
+            if (clientView.getSelectedTableID() == id) {
+                String s = "<html>";
+                clientView.setCanJoin(false);
+
+                for (int i = 0; i < maxPlayers; i++) {
+                    if (playerList[i] == null) {
+                        clientView.setCanJoin(true);
+                        break;
+                    }
+                }
+
+                for (int i = 0; i < maxPlayers; i++) {
+                    if (playerList[i] != null) {
+                        s += playerList[i].getLogin() + " " + playerList[i].getCash() + "$<br/>";
+                    }
+                }
+                s += "</html>";
+                clientView.setTableInfo(s);
+            }
+        } catch (NoItemSelectedException ex) {
+        }
+    }
+
+    @Override
+    public void reactToMessagePlayersOnTable(Player[] playerlist, int id) {
+        clientView.setTableID(id);
+        clientView.addPlayersToTable(playerlist);
+        
+    }
+
+    @Override
+    public void reactToMessageLogin(String source, String login) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void reactToMessageAskAboutTable(String source, int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void reactToMessageJoinTable(String source, int id) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void reactToMessageAskAboutTablesList(String source) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void propertyPlayerChanged() {
+        clientView.setPlayer(clientModel.getPlayer());
+    }
+
+    @Override
+    public void propertyTablesListChanged() {
+        clientView.setTablesList(clientModel.getTablesList());
+        
+    }
+
+    @Override
+    public void reactToMessageCall(int call) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void reactToMessageCheck() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void reactToMessageFold() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void reactToMessageTableStatus(Table table) {
+       clientView.refreshTableStatus(table);
+    }
 }

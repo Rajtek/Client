@@ -5,11 +5,14 @@
  */
 package Client.GUIpannels;
 
-
 import javax.swing.AbstractListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import Client.NoItemSelectedException;
+import Shared.Model.Table;
+import javax.swing.*;
+import javax.swing.SwingUtilities;
+import java.awt.event.ActionEvent;
 
 /**
  *
@@ -20,40 +23,80 @@ public class LobbyJPanel extends javax.swing.JPanel {
     /**
      * Creates new form LobbyJPanel
      */
+    public void createAddingTableForm() {
+        JFrame dialog = new JFrame("Dodaj stół");
+        AddingTableJPanel addingPanel = new AddingTableJPanel();
+        dialog.getContentPane().add(addingPanel);
+        dialog.pack();
+        dialog.setResizable(false);
+        waitForAction(addingPanel);
+        dialog.setVisible(true);
+        lockWindow();
+    }
+
+    private void lockWindow() {
+        SwingUtilities.windowForComponent(this).setEnabled(false);
+    }
+
+    private void disposeAndUnlockWindow(AddingTableJPanel panel) {
+        SwingUtilities.getWindowAncestor(panel).dispose();
+        SwingUtilities.windowForComponent(this).setEnabled(true);
+        SwingUtilities.windowForComponent(this).requestFocus();
+    }
+
+    private void waitForAction(AddingTableJPanel panel) {
+        panel.getjButton1().addActionListener((ActionEvent e) -> {
+            disposeAndUnlockWindow(panel);
+        });
+
+        panel.getjButton2().addActionListener((ActionEvent e) -> {
+            disposeAndUnlockWindow(panel);
+        });
+
+    }
+
     public LobbyJPanel() {
         initComponents();
-        
-        
+
     }
-    
+
     public JButton getJoinButton() {
         return joinButton;
     }
-    public int getTableID() throws NoItemSelectedException{
-        String s=tablesList.getSelectedValue();
-        if(s==null) throw new NoItemSelectedException();
-        s=s.substring(1, 5);
-        s=s.trim();
-        return Integer.parseInt(s);
+
+    public int getTableID() throws NoItemSelectedException {
+//        String s = tablesList.getSelectedValue();
+//        if (s == null) {
+//            throw new NoItemSelectedException();
+//        }
+//        s = s.substring(1, 5);
+//        s = s.trim();
+
+        if(tablesList.getSelectedValue()==null) throw new NoItemSelectedException();
+        
+        return tablesList.getSelectedValue().getId();
     }
-    public void setLogin(String login){
-        loginLabel.setText("Login: "+login);
+
+    public void setLogin(String login) {
+        loginLabel.setText("Login: " + login);
     }
-    public void setCash(Integer cash){
+
+    public void setCash(Integer cash) {
         cashLabel.setText("Cash: " + cash.toString());
-    } 
-    public void setTableInfo(String info){
+    }
+
+    public void setTableInfo(String info) {
         tablePlayersLabel.setText(info);
     }
-    
-    public JList<String> getTablesList() {
+
+    public JList<Table> getTablesList() {
         return tablesList;
     }
-    public void setListModel(AbstractListModel e){
-       tablesList.setModel(e);
+
+    public void setListModel(AbstractListModel e) {
+        tablesList.setModel(e);
     }
-    
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -73,15 +116,11 @@ public class LobbyJPanel extends javax.swing.JPanel {
         joinButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablePlayersLabel = new javax.swing.JLabel();
+        addTableButton = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(800, 600));
 
         tablesList.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        tablesList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "#1   | 150$/300$           | 0/6", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane1.setViewportView(tablesList);
 
         loginLabel.setText("Login:");
@@ -126,6 +165,13 @@ public class LobbyJPanel extends javax.swing.JPanel {
         tablePlayersLabel.setOpaque(true);
         jScrollPane2.setViewportView(tablePlayersLabel);
 
+        addTableButton.setText("Dodaj stół");
+        addTableButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addTableButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -134,16 +180,21 @@ public class LobbyJPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel2))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(joinButton)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jScrollPane1)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLabel2))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(joinButton)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(addTableButton)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,12 +213,20 @@ public class LobbyJPanel extends javax.swing.JPanel {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(joinButton)))
-                .addContainerGap(186, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(addTableButton)
+                .addContainerGap(152, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void addTableButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTableButtonActionPerformed
+
+        createAddingTableForm();
+    }//GEN-LAST:event_addTableButtonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addTableButton;
     private javax.swing.JLabel cashLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -177,8 +236,7 @@ public class LobbyJPanel extends javax.swing.JPanel {
     private javax.swing.JButton joinButton;
     private javax.swing.JLabel loginLabel;
     private javax.swing.JLabel tablePlayersLabel;
-    private javax.swing.JList<String> tablesList;
+    private javax.swing.JList<Table> tablesList;
     // End of variables declaration//GEN-END:variables
-    
-    
+
 }

@@ -5,7 +5,7 @@
  */
 package Client.GUIpannels;
 
-import Shared.Player;
+import Shared.Model.Player;
 
 /**
  *
@@ -46,7 +46,7 @@ public class PlayerJPanel extends javax.swing.JPanel {
             this.setVisible(true);
             System.out.println(player.getLogin());
         }
-        System.out.println(getSize());
+        
     }
 
     @Override

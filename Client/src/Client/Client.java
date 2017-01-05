@@ -25,8 +25,8 @@ public class Client {
         ClientModel m = createClientModel();
         ClientControler c = createClientControler(m);
         ClientView v = new ClientView();
-        v.setModel(m);
-        v.setController(c);
+//        v.setModel(m);
+//        v.setController(c);
         c.setView(v);
         return v;
     }

@@ -5,15 +5,13 @@
  */
 package Client.GUIpannels;
 
-import Shared.Card;
-import Shared.Player;
-import java.util.ArrayList;
-import java.util.List;
+import Shared.Model.Card;
+import Shared.Model.Player;
+import Shared.Model.Table;
+import javax.swing.JButton;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
-import javax.swing.JPanel;
-
-
 
 /**
  *
@@ -22,77 +20,104 @@ import javax.swing.JPanel;
 public class TableJPanel extends javax.swing.JPanel {
 
     /**
-     * 
+     *
      * Creates new form TablePanel
      */
-    
     PlayerJPanel[] playerJPanelList = new PlayerJPanel[10];
-    JLabel[] tableCards= new JLabel[5];
+    JLabel[] tableCards = new JLabel[5];
+    Table table;
     public TableJPanel() {
         initComponents();
-        
-        
-        
-        JLayeredPane jLayeredPane=new JLayeredPane();
-        
+
+        JLayeredPane jLayeredPane = new JLayeredPane();
+
         jLayeredPane.add(tableLabel, 4);
         jLayeredPane.add(cardsJPanel, 1);
         jLayeredPane.setSize(440, 256);
         jLayeredPane1.setSize(440, 256);
         jLayeredPane.setVisible(true);
-        
-        tableCards[0]=(card1);
-        tableCards[1]=(card2);
-        tableCards[2]=(card3);
-        tableCards[3]=(card4);
-        tableCards[4]=(card5);
-        
-        
-        playerJPanelList[0]=(playerJPanel1);
-        playerJPanelList[1]=(playerJPanel2);
-        playerJPanelList[2]=(playerJPanel3);
-        playerJPanelList[3]=(playerJPanel4);
-        playerJPanelList[4]=(playerJPanel5);
-        playerJPanelList[5]=(playerJPanel6);
-        playerJPanelList[6]=(playerJPanel7);
-        playerJPanelList[7]=(playerJPanel8);
-        playerJPanelList[8]=(playerJPanel9);
-        playerJPanelList[9]=(playerJPanel10);
-        
-        for (PlayerJPanel playerJPanel : playerJPanelList){
-           playerJPanel.setVisible(false);
+
+        tableCards[0] = (card1);
+        tableCards[1] = (card2);
+        tableCards[2] = (card3);
+        tableCards[3] = (card4);
+        tableCards[4] = (card5);
+
+        playerJPanelList[0] = (playerJPanel1);
+        playerJPanelList[1] = (playerJPanel2);
+        playerJPanelList[2] = (playerJPanel3);
+        playerJPanelList[3] = (playerJPanel4);
+        playerJPanelList[4] = (playerJPanel5);
+        playerJPanelList[5] = (playerJPanel6);
+        playerJPanelList[6] = (playerJPanel7);
+        playerJPanelList[7] = (playerJPanel8);
+        playerJPanelList[8] = (playerJPanel9);
+        playerJPanelList[9] = (playerJPanel10);
+
+        for (PlayerJPanel playerJPanel : playerJPanelList) {
+            playerJPanel.setVisible(false);
         }
         hideCards();
-        
-}
-public void setPlayers(Player[] players){
 
-    for(int i=0; i<10; i++){
-                if(players[i]==null)playerJPanelList[i].setVisible(false);
-                else{
-                playerJPanelList[i].setNumber(i+1);
+    }
+
+    public JFormattedTextField getCallTextField() {
+        return callTextField;
+    }
+
+    public JButton getCallButton() {
+        return callButton;
+    }
+
+    public JButton getCheckButton() {
+        return checkButton;
+    }
+
+    public JButton getFoldButton() {
+        return foldButton;
+    }
+
+    public void setPlayers(Player[] players) {
+
+        for (int i = 0; i < 10; i++) {
+            if (players[i] == null) {
+                playerJPanelList[i].setVisible(false);
+            } else {
+                playerJPanelList[i].setNumber(i + 1);
                 playerJPanelList[i].setPlayer(players[i]);
                 playerJPanelList[i].setVisible(true);
-                }
             }
-            
-    
-}    
-public void hideCards(){
-    for(JLabel card : tableCards){
-        card.setVisible(false);
+        }
+
     }
-}
-public void setNextCard(Card card){
-    for(int i=0; i<5; i++){
-        if(!tableCards[i].isVisible()){
-            tableCards[i].setVisible(true);
-            tableCards[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/cards/"+card.getPath())));
-            
-            break;
+    public void refreshTable(Table table){
+        setPlayers(table.getPlayers());
+        setButtonsEnabled(table.isGameStarted());
+    }
+    public void setButtonsEnabled(boolean b) {
+        callButton.setEnabled(b);
+        callTextField.setEnabled(b);
+        foldButton.setEnabled(b);
+        checkButton.setEnabled(b);
+
+    }
+
+    public void hideCards() {
+        for (JLabel card : tableCards) {
+            card.setVisible(false);
         }
     }
-}
+
+    public void setNextCard(Card card) {
+        for (int i = 0; i < 5; i++) {
+            if (!tableCards[i].isVisible()) {
+                tableCards[i].setVisible(true);
+                tableCards[i].setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/cards/" + card.getPath())));
+
+                break;
+            }
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -103,6 +128,7 @@ public void setNextCard(Card card){
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButton1 = new javax.swing.JButton();
         jLayeredPane1 = new javax.swing.JLayeredPane();
         tableLabel = new javax.swing.JLabel();
         cardsJPanel = new javax.swing.JPanel();
@@ -111,6 +137,11 @@ public void setNextCard(Card card){
         card3 = new javax.swing.JLabel();
         card4 = new javax.swing.JLabel();
         card5 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        foldButton = new javax.swing.JButton();
+        callButton = new javax.swing.JButton();
+        checkButton = new javax.swing.JButton();
+        callTextField = new javax.swing.JFormattedTextField();
         playerJPanel1 = new Client.GUIpannels.PlayerJPanel();
         playerJPanel2 = new Client.GUIpannels.PlayerJPanel();
         playerJPanel3 = new Client.GUIpannels.PlayerJPanel();
@@ -121,6 +152,8 @@ public void setNextCard(Card card){
         playerJPanel8 = new Client.GUIpannels.PlayerJPanel();
         playerJPanel9 = new Client.GUIpannels.PlayerJPanel();
         playerJPanel10 = new Client.GUIpannels.PlayerJPanel();
+
+        jButton1.setText("jButton1");
 
         setPreferredSize(new java.awt.Dimension(800, 600));
 
@@ -165,8 +198,51 @@ public void setNextCard(Card card){
             .addComponent(card5)
         );
 
+        foldButton.setText("fold");
+        foldButton.setEnabled(false);
+
+        callButton.setText("call");
+        callButton.setEnabled(false);
+
+        checkButton.setText("check");
+        checkButton.setEnabled(false);
+
+        callTextField.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.NumberFormatter(new java.text.DecimalFormat("0"))));
+        callTextField.setText("0");
+        callTextField.setEnabled(false);
+        callTextField.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                callTextFieldKeyTyped(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(callButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(callTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(checkButton)
+            .addComponent(foldButton)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(checkButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(foldButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(callButton)
+                    .addComponent(callTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+
         jLayeredPane1.setLayer(tableLabel, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jLayeredPane1.setLayer(cardsJPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(jPanel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
@@ -175,7 +251,9 @@ public void setNextCard(Card card){
             .addGroup(jLayeredPane1Layout.createSequentialGroup()
                 .addGap(174, 174, 174)
                 .addComponent(tableLabel)
-                .addContainerGap(186, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(45, Short.MAX_VALUE))
             .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jLayeredPane1Layout.createSequentialGroup()
                     .addGap(0, 58, Short.MAX_VALUE)
@@ -187,6 +265,10 @@ public void setNextCard(Card card){
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayeredPane1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(tableLabel))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayeredPane1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(80, 80, 80))
             .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jLayeredPane1Layout.createSequentialGroup()
                     .addGap(0, 84, Short.MAX_VALUE)
@@ -245,15 +327,28 @@ public void setNextCard(Card card){
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void callTextFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_callTextFieldKeyTyped
+        char enter = evt.getKeyChar();
+        if (!(Character.isDigit(enter))) {
+            evt.consume();
+        }
+    }//GEN-LAST:event_callTextFieldKeyTyped
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton callButton;
+    private javax.swing.JFormattedTextField callTextField;
     private javax.swing.JLabel card1;
     private javax.swing.JLabel card2;
     private javax.swing.JLabel card3;
     private javax.swing.JLabel card4;
     private javax.swing.JLabel card5;
     private javax.swing.JPanel cardsJPanel;
+    private javax.swing.JButton checkButton;
+    private javax.swing.JButton foldButton;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLayeredPane jLayeredPane1;
+    private javax.swing.JPanel jPanel1;
     private Client.GUIpannels.PlayerJPanel playerJPanel1;
     private Client.GUIpannels.PlayerJPanel playerJPanel10;
     private Client.GUIpannels.PlayerJPanel playerJPanel2;

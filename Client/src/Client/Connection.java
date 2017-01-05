@@ -63,9 +63,8 @@ public class Connection implements Runnable {
             while (true) {
                 Shared.Messages.Message a;
                 a = (Shared.Messages.Message) ois.readObject();
-                //System.out.println("<Nadeszlo:> " + a.getSource() + " " + sock.getRemoteSocketAddress());
 //                try {
-//                        sleep(1000);
+//                        sleep(50);
 //                    } catch (InterruptedException ex) {
 //                        
 //                    }
@@ -75,25 +74,16 @@ public class Connection implements Runnable {
             //zamykanie polaczenia                                                           
 
         } catch (IOException ex) {
-            System.err.println(ex);
+            System.err.println(ex+"qweqwe");
 
-        } catch (ClassNotFoundException ex) {
+        } 
+        catch (ClassNotFoundException ex) {
             Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
 
     }
 
-//    public void SendLogin(String s) {
-//
-//        PrintWriter outp;
-//        try {
-//            outp = new PrintWriter(sock.getOutputStream());
-//            outp.println(s);
-//            outp.flush();
-//        } catch (IOException ex) {
-//            System.err.print(ex);
-//        }
-//    }
     public void SendMessage(Message m) {
         try {
 
