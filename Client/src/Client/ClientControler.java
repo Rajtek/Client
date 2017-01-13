@@ -9,17 +9,16 @@ import Shared.Messages.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import javax.swing.event.ListSelectionEvent;
-import Shared.Model.Player;
-import Shared.Model.Table;
+import Shared.Model.User;
+import Shared.Model.Room;
 import java.util.List;
 import Shared.Model.ControlerInterface;
-
 
 /**
  *
  * @author Rajtek
  */
-public class ClientControler implements SocketListener, ControlerInterface, ModelListener {
+public class ClientControler implements SocketListener, ControlerInterface, ModelListener, ClientViewListener {
 
     private ClientView clientView;
     private ClientModel clientModel;
@@ -34,6 +33,7 @@ public class ClientControler implements SocketListener, ControlerInterface, Mode
 
     void setView(ClientView v) {
         clientView = v;
+        clientView.setControlerListener(this);
 
         clientView.addSendListener((ActionEvent e) -> {
             String address;
@@ -71,7 +71,7 @@ public class ClientControler implements SocketListener, ControlerInterface, Mode
             if (!evt.getValueIsAdjusting()) {
 
                 try {
-                    connection.SendMessage(new MessageAskAboutTable(connection.getSource(), clientView.getSelectedTableID()));
+                    connection.SendMessage(new MessageAskAboutRoom(connection.getSource(), clientView.getSelectedRoomID()));
                 } catch (NoItemSelectedException ex) {
                 }
 
@@ -81,33 +81,31 @@ public class ClientControler implements SocketListener, ControlerInterface, Mode
         clientView.addJoinListener((ActionEvent e) -> {
 
             try {
-                connection.SendMessage(new MessageJoinTable(connection.getSource(), clientView.getSelectedTableID()));
+                connection.SendMessage(new MessageJoinRoom(connection.getSource(), clientView.getSelectedRoomID()));
 
-                clientView.showTablePanel();
+                clientView.showRoomPanel();
 
             } catch (NoItemSelectedException ex) {
 
             }
 
         });
-        
-        clientView.addCallListener((ActionEvent e) -> {
-            
-           
+
+        clientView.addRoomSendListener((ActionEvent e) -> {
+
+            try {
+                if (clientView.getAnswer().length() > 0) {
+                    connection.SendMessage(new MessageAnswer(connection.getSource(), clientView.getSelectedRoomID(), clientView.getAnswer()));
+                }
+
+                clientView.showRoomPanel();
+
+            } catch (NoItemSelectedException ex) {
+
+            }
 
         });
-        
-        clientView.addCheckListener((ActionEvent e) -> {
 
-           
-
-        });
-        
-        clientView.addFoldListener((ActionEvent e) -> {
-
-           
-
-        });
     }
 
     @Override
@@ -122,52 +120,48 @@ public class ClientControler implements SocketListener, ControlerInterface, Mode
     }
 
     @Override
-    public void reactToMessageLoginSuccessful(Player player, List<Table> tablesList) {
-        clientModel.setPlayer(player);
-        clientModel.setTablesList(tablesList);
+    public void reactToMessageLoginSuccessful(User user, List<Room> roomsList) {
+        clientModel.setUser(user);
+        clientModel.setRoomsList(roomsList);
 
         clientView.showLobbyPanel();
 
     }
 
     @Override
-    public void reactToMessageTablesList(List<Table> tablesList) {
-        clientModel.setTablesList(tablesList);
+    public void reactToMessageRoomsList(List<Room> roomsList) {
+        clientModel.setRoomsList(roomsList);
 
     }
 
     @Override
-    public void reactToMessagePlayerList(Player[] playerList, int maxPlayers, int id) {
-        clientView.setTableInfo(" ");
+    public void reactToMessageUserList(List<User> userList, int maxUsers, int id) {
+        clientView.setRoomInfo(" ");
         try {
-            if (clientView.getSelectedTableID() == id) {
+            if (clientView.getSelectedRoomID() == id) {
                 String s = "<html>";
                 clientView.setCanJoin(false);
-
-                for (int i = 0; i < maxPlayers; i++) {
-                    if (playerList[i] == null) {
-                        clientView.setCanJoin(true);
-                        break;
-                    }
+                if (userList.size() < maxUsers) {
+                    clientView.setCanJoin(true);
                 }
 
-                for (int i = 0; i < maxPlayers; i++) {
-                    if (playerList[i] != null) {
-                        s += playerList[i].getLogin() + " " + playerList[i].getCash() + "$<br/>";
-                    }
+                for (User user : userList) {
+                    s += user.getLogin() + "<br/>";
                 }
+
                 s += "</html>";
-                clientView.setTableInfo(s);
+                clientView.setRoomInfo(s);
             }
         } catch (NoItemSelectedException ex) {
         }
     }
 
     @Override
-    public void reactToMessagePlayersOnTable(Player[] playerlist, int id) {
-        clientView.setTableID(id);
-        clientView.addPlayersToTable(playerlist);
-        
+    public void reactToMessageUsersOnRoom(List<User> userlist, int id) {
+        clientModel.setId(id);
+        clientView.setRoomID(id);
+        clientView.setUsersListInRoom(userlist);
+
     }
 
     @Override
@@ -176,48 +170,93 @@ public class ClientControler implements SocketListener, ControlerInterface, Mode
     }
 
     @Override
-    public void reactToMessageAskAboutTable(String source, int id) {
+    public void reactToMessageAskAboutRoom(String source, int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void reactToMessageJoinTable(String source, int id) {
+    public void reactToMessageJoinRoom(String source, int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void reactToMessageAskAboutTablesList(String source) {
+    public void reactToMessageAskAboutRoomsList(String source) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void propertyPlayerChanged() {
-        clientView.setPlayer(clientModel.getPlayer());
+    public void propertyUserChanged() {
+        clientView.setUser(clientModel.getUser());
     }
 
     @Override
-    public void propertyTablesListChanged() {
-        clientView.setTablesList(clientModel.getTablesList());
+    public void propertyRoomsListChanged() {
+        clientView.setRoomsList(clientModel.getRoomsList());
+
+    }
+
+    @Override
+    public void reactToMessageRoomStatus(boolean gameStarted, int id) {
+        clientModel.setId(id);
+        clientModel.setGameStarted(gameStarted);
+    }
+
+    @Override
+    public void reactToMessageTextMsg(String login, String msg) {
+        clientModel.getTextMessage(login, msg);
+    }
+
+    @Override
+    public void reactToMessageImage(String source, int id, int[] data) {
+        clientView.updateImage(data);
+    }
+
+    @Override
+    public void drawingChanged(int[] data) {
+        connection.SendMessage(new MessageImage(connection.getSource(), clientModel.getId(), data));
+    }
+
+    @Override
+    public void reactToMessageAnswer(String source, int id, String answer) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void reactToMessagePlayerDrawing(String phrase) {
+        clientModel.setIsDrawing(true);
+        clientModel.setPhrase(phrase);
+    }
+
+    @Override
+    public void propertyIsDrawingChanged() {
+        clientView.setDrawingEnabled(clientModel.isDrawing());
         
     }
 
     @Override
-    public void reactToMessageCall(int call) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void propertyPhraseChanged() {
+        clientView.setPhrase(clientModel.getPhrase());
     }
 
     @Override
-    public void reactToMessageCheck() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void addNewTextMessage(String msg) {
+        clientView.addNewTextMessage(msg);
     }
 
     @Override
-    public void reactToMessageFold() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void reactToMessageGameStopped() {
+        clientModel.setIsDrawing(false);
+        clientModel.setChatEnabled(false);
+    }
+    @Override
+    public void setChatEnabled(boolean b){
+        clientView.setChatEnabled(b);
     }
 
     @Override
-    public void reactToMessageTableStatus(Table table) {
-       clientView.refreshTableStatus(table);
+    public void reactToMessageGoodAnswer(String source, int id, String answer) {
+        clientModel.getGoodAnswer(source, answer);
     }
+
+
 }

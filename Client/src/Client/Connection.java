@@ -63,11 +63,16 @@ public class Connection implements Runnable {
             while (true) {
                 Shared.Messages.Message a;
                 a = (Shared.Messages.Message) ois.readObject();
+                
+                
+                //symulacja opóźnienia
 //                try {
-//                        sleep(50);
+//                        sleep(500);
 //                    } catch (InterruptedException ex) {
 //                        
 //                    }
+
+
                 notifyListener(a);
                
             }
@@ -86,7 +91,7 @@ public class Connection implements Runnable {
 
     public void SendMessage(Message m) {
         try {
-
+            System.err.println(m.getClass());
             oos.writeObject(m);
 
         } catch (IOException ex) {

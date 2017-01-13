@@ -7,49 +7,95 @@ package Client;
 
 import java.util.List;
 import Shared.Model.*;
-import java.util.ArrayList;
+
 /**
  *
  * @author Rajtek
  */
 public class ClientModel {
-    private Player player;
-    private List<Table> tablesList;
-    private final List<ModelListener> listeners = new ArrayList<>();
-    
-   
-    public List<Table> getTablesList() {
-        return tablesList;
+
+    private User user;
+    private List<Room> roomsList;
+    private ModelListener listener;
+    private int id;
+    private boolean isDrawing = false;
+    private boolean gameStared = false;
+    private String phrase;
+
+    public int getId() {
+        return id;
     }
 
-    public void setTablesList(List<Table> tablesList) {
-        this.tablesList = tablesList;
-        propertyTablesListChanged();
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public void setPlayer(Player player) {
-        this.player = player;
-        propertyPlayerChanged();
+    public List<Room> getRoomsList() {
+        return roomsList;
     }
 
-    public Player getPlayer() {
-        return player;
+    public void setRoomsList(List<Room> roomsList) {
+        this.roomsList = roomsList;
+        listener.propertyRoomsListChanged();
     }
-    
-    public void addListener(ModelListener toAdd){
-       listeners.add(toAdd);
-   }
-   
-   private void propertyPlayerChanged(){
-       for (ModelListener s : listeners){
-           s.propertyPlayerChanged();
-       }
-   }
-   
-   private void propertyTablesListChanged(){
-       for (ModelListener s : listeners){
-           s.propertyTablesListChanged();
-       }
-   }
-    
+
+    public void setUser(User user) {
+        this.user = user;
+        listener.propertyUserChanged();
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void addListener(ModelListener listener) {
+        this.listener = listener;
+    }
+
+    public void setIsDrawing(boolean b) {
+        isDrawing = b;
+        listener.propertyIsDrawingChanged();
+    }
+
+    public boolean isDrawing() {
+        return isDrawing;
+    }
+
+    public void setPhrase(String phrase) {
+        this.phrase = phrase;
+        listener.propertyPhraseChanged();
+    }
+
+    public String getPhrase() {
+        return phrase;
+    }
+
+    public void getTextMessage(String login, String msg) {
+        listener.addNewTextMessage("<"+login+">: "+msg);
+    }
+
+    void setChatEnabled(boolean b) {
+        listener.setChatEnabled(b);
+    }
+
+    void setGameStarted(boolean gameStarted) {
+        this.gameStared=gameStarted;
+        if(gameStarted&&isDrawing){
+            listener.setChatEnabled(false);
+        }
+        if(gameStarted&&!isDrawing){
+            listener.setChatEnabled(true);
+        }
+        if(!gameStarted){
+            listener.setChatEnabled(false);
+        }
+    }
+
+
+    void getGoodAnswer(String login, String answer) {
+        if(isDrawing)setIsDrawing(false);
+        listener.addNewTextMessage("<html><b><"+login+">: "+answer+" - Dobra odpowiedź!</b></html>");
+        
+    }
+
 }

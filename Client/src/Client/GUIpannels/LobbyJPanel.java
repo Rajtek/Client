@@ -7,12 +7,12 @@ package Client.GUIpannels;
 
 import javax.swing.AbstractListModel;
 import javax.swing.JButton;
-import javax.swing.JList;
 import Client.NoItemSelectedException;
-import Shared.Model.Table;
 import javax.swing.*;
 import javax.swing.SwingUtilities;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -23,9 +23,9 @@ public class LobbyJPanel extends javax.swing.JPanel {
     /**
      * Creates new form LobbyJPanel
      */
-    public void createAddingTableForm() {
-        JFrame dialog = new JFrame("Dodaj stół");
-        AddingTableJPanel addingPanel = new AddingTableJPanel();
+    public void createAddingRoomForm() {
+        JFrame dialog = new JFrame("Dodaj pokój");
+        AddingRoomJPanel addingPanel = new AddingRoomJPanel();
         dialog.getContentPane().add(addingPanel);
         dialog.pack();
         dialog.setResizable(false);
@@ -38,13 +38,13 @@ public class LobbyJPanel extends javax.swing.JPanel {
         SwingUtilities.windowForComponent(this).setEnabled(false);
     }
 
-    private void disposeAndUnlockWindow(AddingTableJPanel panel) {
+    private void disposeAndUnlockWindow(AddingRoomJPanel panel) {
         SwingUtilities.getWindowAncestor(panel).dispose();
         SwingUtilities.windowForComponent(this).setEnabled(true);
         SwingUtilities.windowForComponent(this).requestFocus();
     }
 
-    private void waitForAction(AddingTableJPanel panel) {
+    private void waitForAction(AddingRoomJPanel panel) {
         panel.getjButton1().addActionListener((ActionEvent e) -> {
             disposeAndUnlockWindow(panel);
         });
@@ -59,12 +59,17 @@ public class LobbyJPanel extends javax.swing.JPanel {
         initComponents();
 
     }
-
-    public JButton getJoinButton() {
-        return joinButton;
+    
+    public void addJoinListener(ActionListener listenForJoinButton) {
+        joinButton.addActionListener(listenForJoinButton);
+    }
+    
+    public void setJoinButtonEnabled(boolean b){
+        joinButton.setEnabled(b);
     }
 
-    public int getTableID() throws NoItemSelectedException {
+
+    public int getRoomID() throws NoItemSelectedException {
 //        String s = tablesList.getSelectedValue();
 //        if (s == null) {
 //            throw new NoItemSelectedException();
@@ -72,29 +77,29 @@ public class LobbyJPanel extends javax.swing.JPanel {
 //        s = s.substring(1, 5);
 //        s = s.trim();
 
-        if(tablesList.getSelectedValue()==null) throw new NoItemSelectedException();
+        if(roomsList.getSelectedValue()==null) throw new NoItemSelectedException();
         
-        return tablesList.getSelectedValue().getId();
+        return roomsList.getSelectedValue().getId();
     }
 
     public void setLogin(String login) {
         loginLabel.setText("Login: " + login);
     }
 
-    public void setCash(Integer cash) {
-        cashLabel.setText("Cash: " + cash.toString());
-    }
 
-    public void setTableInfo(String info) {
-        tablePlayersLabel.setText(info);
-    }
 
-    public JList<Table> getTablesList() {
-        return tablesList;
+    public void setRoomInfo(String info) {
+        rommUsersLabel.setText(info);
     }
-
-    public void setListModel(AbstractListModel e) {
-        tablesList.setModel(e);
+    public void setListModel(AbstractListModel m){
+        roomsList.setModel(m);
+    }
+    public void refreshList(){
+        roomsList.ensureIndexIsVisible(0);
+    }
+    
+    public void addListListener(ListSelectionListener l){
+        roomsList.addListSelectionListener(l);
     }
 
     /**
@@ -107,25 +112,22 @@ public class LobbyJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tablesList = new javax.swing.JList<>();
+        roomsList = new javax.swing.JList<>();
         jPanel1 = new javax.swing.JPanel();
         loginLabel = new javax.swing.JLabel();
-        cashLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         joinButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tablePlayersLabel = new javax.swing.JLabel();
-        addTableButton = new javax.swing.JButton();
+        rommUsersLabel = new javax.swing.JLabel();
+        addRoomButton = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(800, 600));
 
-        tablesList.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        jScrollPane1.setViewportView(tablesList);
+        roomsList.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        jScrollPane1.setViewportView(roomsList);
 
         loginLabel.setText("Login:");
-
-        cashLabel.setText("Cash:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -133,9 +135,7 @@ public class LobbyJPanel extends javax.swing.JPanel {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cashLabel)
-                    .addComponent(loginLabel))
+                .addComponent(loginLabel)
                 .addContainerGap(169, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -143,32 +143,30 @@ public class LobbyJPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(loginLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(cashLabel)
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(88, Short.MAX_VALUE))
         );
 
-        jLabel1.setText("ID stołu           Blind                                              Graczy/Miejsc");
+        jLabel1.setText("ID pokoju                                                           Użytkownicy/Miejsc");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLabel2.setText("Dostępne stoły:");
+        jLabel2.setText("Dostępne pokoje:");
 
         joinButton.setText("Połącz");
         joinButton.setEnabled(false);
 
         jScrollPane2.setPreferredSize(new java.awt.Dimension(100, 200));
 
-        tablePlayersLabel.setBackground(new java.awt.Color(250, 250, 250));
-        tablePlayersLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        tablePlayersLabel.setBorder(javax.swing.BorderFactory.createTitledBorder("Gacze online:"));
-        tablePlayersLabel.setMinimumSize(new java.awt.Dimension(12, 203));
-        tablePlayersLabel.setOpaque(true);
-        jScrollPane2.setViewportView(tablePlayersLabel);
+        rommUsersLabel.setBackground(new java.awt.Color(250, 250, 250));
+        rommUsersLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
+        rommUsersLabel.setBorder(javax.swing.BorderFactory.createTitledBorder("Użytkownicy online:"));
+        rommUsersLabel.setMinimumSize(new java.awt.Dimension(12, 203));
+        rommUsersLabel.setOpaque(true);
+        jScrollPane2.setViewportView(rommUsersLabel);
 
-        addTableButton.setText("Dodaj stół");
-        addTableButton.addActionListener(new java.awt.event.ActionListener() {
+        addRoomButton.setText("Dodaj pokój");
+        addRoomButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addTableButtonActionPerformed(evt);
+                addRoomButtonActionPerformed(evt);
             }
         });
 
@@ -193,7 +191,7 @@ public class LobbyJPanel extends javax.swing.JPanel {
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(joinButton)))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(addTableButton)
+                        .addComponent(addRoomButton)
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -214,20 +212,19 @@ public class LobbyJPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(joinButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(addTableButton)
+                .addComponent(addRoomButton)
                 .addContainerGap(152, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void addTableButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addTableButtonActionPerformed
+    private void addRoomButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addRoomButtonActionPerformed
 
-        createAddingTableForm();
-    }//GEN-LAST:event_addTableButtonActionPerformed
+        createAddingRoomForm();
+    }//GEN-LAST:event_addRoomButtonActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addTableButton;
-    private javax.swing.JLabel cashLabel;
+    private javax.swing.JButton addRoomButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -235,8 +232,8 @@ public class LobbyJPanel extends javax.swing.JPanel {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton joinButton;
     private javax.swing.JLabel loginLabel;
-    private javax.swing.JLabel tablePlayersLabel;
-    private javax.swing.JList<Table> tablesList;
+    private javax.swing.JLabel rommUsersLabel;
+    private javax.swing.JList<Shared.Model.Room> roomsList;
     // End of variables declaration//GEN-END:variables
 
 }

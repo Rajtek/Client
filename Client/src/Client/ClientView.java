@@ -6,8 +6,8 @@
 package Client;
 
 import Client.GUIpannels.*;
-import Shared.Model.Player;
-import Shared.Model.Table;
+import Shared.Model.User;
+import Shared.Model.Room;
 import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -17,16 +17,20 @@ import javax.swing.event.ListSelectionListener;
  *
  * @author Rajtek
  */
-public class ClientView extends JPanel implements ClientViewInterface {
+public class ClientView extends JPanel implements ClientViewInterface, DrawAreaListener {
+
+    
 
     private ConnectionJPanel connectionJPanel = new ConnectionJPanel();
     private LoginJPanel loginJPanel = new LoginJPanel();
     private LobbyJPanel lobbyJPanel = new LobbyJPanel();
-    private TableJPanel tableJPanel = new TableJPanel();
-    private DefaultListModel listModel= new DefaultListModel();
+    private RoomJPanel roomJPanel = new RoomJPanel();
+    private DefaultListModel lobbyListModel = new DefaultListModel();
+    private DefaultListModel roomListModel = new DefaultListModel();
     private int id;
     String login;
-    int cash;
+    ClientViewListener viewListener;
+
     public ClientView() {
         setSize(800, 600);
         setFocusable(true);
@@ -34,10 +38,12 @@ public class ClientView extends JPanel implements ClientViewInterface {
         this.add(connectionJPanel);
         this.add(loginJPanel);
         this.add(lobbyJPanel);
-        this.add(tableJPanel);
+        this.add(roomJPanel);
         connectionJPanel.setVisible(true);
         loginJPanel.setVisible(false);
-        lobbyJPanel.getTablesList().setModel(listModel);
+        lobbyJPanel.setListModel(lobbyListModel);
+        roomJPanel.setDrawAreaListener(this);
+        
     }
 
     @Override
@@ -57,36 +63,31 @@ public class ClientView extends JPanel implements ClientViewInterface {
     }
 
     public void addJoinListener(ActionListener listenForJoinButton) {
-        lobbyJPanel.getJoinButton().addActionListener(listenForJoinButton);
+        lobbyJPanel.addJoinListener(listenForJoinButton);
     }
 
-    public void setTableInfo(String s) {
-        lobbyJPanel.setTableInfo(s);
+    public void setRoomInfo(String s) {
+        lobbyJPanel.setRoomInfo(s);
     }
 
-    public void addListValueListener(ListSelectionListener listSelectionListener) {
-        lobbyJPanel.getTablesList().addListSelectionListener(listSelectionListener);
-    }
+
 
     public void addLoginListener(ActionListener listenForLoginButton) {
         loginJPanel.getLoginButton().addActionListener(listenForLoginButton);
     }
 
     public void addListSelectionListener(ListSelectionListener listener) {
-        lobbyJPanel.getTablesList().addListSelectionListener(listener);
+        lobbyJPanel.addListListener(listener);
     }
     
-    public void addFoldListener(ActionListener listenForFoldButton){
-        tableJPanel.getFoldButton().addActionListener(listenForFoldButton);
+    public void setControlerListener(ClientViewListener listener){
+        viewListener=listener;
     }
     
-    public void addCallListener(ActionListener listenForCallButton){
-        tableJPanel.getCallButton().addActionListener(listenForCallButton);
+    public void addRoomSendListener(ActionListener listener){
+        roomJPanel.addSendListener(listener);
     }
 
-    public void addCheckListener(ActionListener listenForCheckButton){
-        tableJPanel.getCheckButton().addActionListener(listenForCheckButton);
-    }
     
     @Override
     public void displayErrorMessage(String errorMessage) {
@@ -97,16 +98,14 @@ public class ClientView extends JPanel implements ClientViewInterface {
         lobbyJPanel.setLogin(login);
     }
 
-    void setLobbyCash(int cash) {
-        lobbyJPanel.setCash(cash);
-    }
+
 
     String getLogin() {
         return loginJPanel.getLogin();
     }
 
-    public int getSelectedTableID() throws NoItemSelectedException {
-        return lobbyJPanel.getTableID();
+    public int getSelectedRoomID() throws NoItemSelectedException {
+        return lobbyJPanel.getRoomID();
     }
 
     void showLoginPanel() {
@@ -115,8 +114,9 @@ public class ClientView extends JPanel implements ClientViewInterface {
         loginJPanel.setVisible(true);
     }
 
-    void showTablePanel() {
-        tableJPanel.setVisible(true);
+    void showRoomPanel() {
+        roomJPanel.setVisible(true);
+
         lobbyJPanel.setVisible(false);
         
 
@@ -130,45 +130,67 @@ public class ClientView extends JPanel implements ClientViewInterface {
 
     }
     
-    
-    void addPlayersToTable(Player[] players) {
-        tableJPanel.setPlayers(players);
-    }
 
 
-
-    public void setTablesList(List<Table> tablesList) {
-        listModel.clear();
-        for(Table table : tablesList){
-            listModel.addElement(table);
-            if(table.getId()==id){
-                
-                tableJPanel.refreshTable(table);
-            }
+    public void setRoomsList(List<Room> roomsList) {
+        lobbyListModel.clear();
+        for(Room room : roomsList){
+            lobbyListModel.addElement(room);
         }
-        lobbyJPanel.getTablesList().ensureIndexIsVisible(0);
+        lobbyJPanel.refreshList();
         
     }
 
-    public void refreshTableStatus(Table table){
-        tableJPanel.refreshTable(table);
-    }
+    
     
     public void setCanJoin(boolean b) {
 
-        lobbyJPanel.getJoinButton().setEnabled(b);
+        lobbyJPanel.setJoinButtonEnabled(b);
     }
     
-    public void setPlayer(Player player){
-        login = player.getLogin();
-        cash = player.getCash();
+    public void setUser(User user){
+//        this.user=user;
+        login = user.getLogin();
         
         lobbyJPanel.setLogin(login);
-        lobbyJPanel.setCash(cash);
     }
     
-    public void setTableID(int id){
+    public void setRoomID(int id){
         this.id=id;
+    }
+
+    public void setUsersListInRoom(List<User> userList) {
+        roomJPanel.setUsersList(userList);
+    }
+    
+    public void updateImage(int[] data){
+        roomJPanel.updateImage(data);
+    }
+    @Override
+    public void drawingChanged(int[] data) {
+        System.out.println("Narysowane");
+        viewListener.drawingChanged(data);
+    }
+
+    String getAnswer() {
+        return roomJPanel.getAnswer();
+    }
+
+    public void setDrawingEnabled(boolean drawing) {
+        roomJPanel.setDrawing(drawing);
+        roomJPanel.setChatEnabled(false);
+    }
+
+    public void setPhrase(String phrase) {
+        roomJPanel.setPhrase(phrase);
+    }
+
+    void addNewTextMessage(String msg) {
+        roomJPanel.addTextMessage(msg);
+    }
+
+    void setChatEnabled(boolean b) {
+        roomJPanel.setChatEnabled(b);
     }
     
 

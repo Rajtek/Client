@@ -10,6 +10,14 @@ package Client;
  * @author Rajtek
  */
 public interface ModelListener {
-    public void propertyPlayerChanged();
-    public void propertyTablesListChanged();
+    public void propertyUserChanged();
+    public void propertyRoomsListChanged();
+    public void propertyIsDrawingChanged();
+
+    public void propertyPhraseChanged();
+
+    public void addNewTextMessage(String msg);
+
+    public void setChatEnabled(boolean b);
+
 }

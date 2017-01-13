@@ -32,7 +32,7 @@ public class Client {
     }
 
     private static void createAndShowGUI() {
-        JFrame frame = new JFrame("Texas Holdem");
+        JFrame frame = new JFrame("Kalambury");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
         ClientView v = createModelViewController();

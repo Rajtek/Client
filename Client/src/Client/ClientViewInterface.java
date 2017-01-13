@@ -13,10 +13,6 @@ import java.awt.event.ActionListener;
  */
 public interface ClientViewInterface {
 
-//    void setModel(ClientModel clientModel);
-//
-//    void setController(ClientControler clientController);
-
     void displayErrorMessage(String errorMessage);
 
     String getAddress();

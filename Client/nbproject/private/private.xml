@@ -3,16 +3,23 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="2"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/ClientControler.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/GUIpannels/TableJPanel.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/ClientViewInterface.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/GUIpannels/LobbyJPanel.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/ModelListener.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/SocketListener.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/Connection.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/Client.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/ClientModel.java</file>
-            <file>file:/F:/Git/PROZ/PROZ.client/Client/src/Client/ClientView.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/GUIpannels/ConnectionJPanel.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/Client.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/ClientViewListener.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/Connection.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/GUIpannels/DrawAreaListener.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/ModelListener.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/GUIpannels/RoomJPanel.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/ClientView.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/GUIpannels/LobbyJPanel.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/ClientControler.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/SocketListener.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/ClientModel.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/NoItemSelectedException.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/ClientViewInterface.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/GUIpannels/AddingRoomJPanel.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/GUIpannels/LoginJPanel.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/IPException.java</file>
         </group>
     </open-files>
 </project-private>
