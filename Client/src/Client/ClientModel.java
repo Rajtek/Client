@@ -17,6 +17,8 @@ public class ClientModel {
     private User user;
     private List<Room> roomsList;
     private ModelListener listener;
+
+    
     private int id;
     private boolean isDrawing = false;
     private boolean gameStared = false;
@@ -53,7 +55,10 @@ public class ClientModel {
     }
 
     public void setIsDrawing(boolean b) {
+        listener.setChatEnabled(!b);
+        
         isDrawing = b;
+        
         listener.propertyIsDrawingChanged();
     }
 
@@ -92,10 +97,12 @@ public class ClientModel {
     }
 
 
-    void getGoodAnswer(String login, String answer) {
-        if(isDrawing)setIsDrawing(false);
-        listener.addNewTextMessage("<html><b><"+login+">: "+answer+" - Dobra odpowiedź!</b></html>");
+    void goodAnswer(String login, String answer) {
+        setIsDrawing(false);
+        listener.addNewTextMessage("<"+login+">: "+answer+" - Dobra odpowiedź!");
         
     }
+    
+
 
 }

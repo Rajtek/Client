@@ -6,7 +6,6 @@
 package Client.GUIpannels;
 
 import javax.swing.AbstractListModel;
-import javax.swing.JButton;
 import Client.NoItemSelectedException;
 import javax.swing.*;
 import javax.swing.SwingUtilities;

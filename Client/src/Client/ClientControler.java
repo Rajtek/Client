@@ -20,7 +20,8 @@ import Shared.Model.ControlerInterface;
  */
 public class ClientControler implements SocketListener, ControlerInterface, ModelListener, ClientViewListener {
 
-    private ClientView clientView;
+    
+    private ClientViewInterface clientView;
     private ClientModel clientModel;
     private Connection connection;
     Thread t = null;
@@ -255,7 +256,7 @@ public class ClientControler implements SocketListener, ControlerInterface, Mode
 
     @Override
     public void reactToMessageGoodAnswer(String source, int id, String answer) {
-        clientModel.getGoodAnswer(source, answer);
+        clientModel.goodAnswer(source, answer);
     }
 
 

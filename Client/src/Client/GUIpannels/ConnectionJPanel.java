@@ -53,7 +53,7 @@ public class ConnectionJPanel extends javax.swing.JPanel {
 
         jLabel1.setFont(new java.awt.Font("Monospaced", 0, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("Chat Room");
+        jLabel1.setText("Kalambury");
 
         jLabel2.setText("Podaj adres i port serwera");
 

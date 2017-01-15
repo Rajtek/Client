@@ -62,28 +62,33 @@ public class ClientView extends JPanel implements ClientViewInterface, DrawAreaL
 
     }
 
+    @Override
     public void addJoinListener(ActionListener listenForJoinButton) {
         lobbyJPanel.addJoinListener(listenForJoinButton);
     }
 
+    @Override
     public void setRoomInfo(String s) {
         lobbyJPanel.setRoomInfo(s);
     }
 
 
-
+    @Override
     public void addLoginListener(ActionListener listenForLoginButton) {
         loginJPanel.getLoginButton().addActionListener(listenForLoginButton);
     }
 
+    @Override
     public void addListSelectionListener(ListSelectionListener listener) {
         lobbyJPanel.addListListener(listener);
     }
     
+    @Override
     public void setControlerListener(ClientViewListener listener){
         viewListener=listener;
     }
     
+    @Override
     public void addRoomSendListener(ActionListener listener){
         roomJPanel.addSendListener(listener);
     }
@@ -94,44 +99,46 @@ public class ClientView extends JPanel implements ClientViewInterface, DrawAreaL
         JOptionPane.showMessageDialog(this, errorMessage);
     }
 
-    void setLobbyLogin(String login) {
+    @Override
+    public void setLobbyLogin(String login) {
         lobbyJPanel.setLogin(login);
     }
 
 
-
-    String getLogin() {
+    @Override
+    public String getLogin() {
         return loginJPanel.getLogin();
     }
 
+    
+    @Override
     public int getSelectedRoomID() throws NoItemSelectedException {
         return lobbyJPanel.getRoomID();
     }
 
-    void showLoginPanel() {
+    @Override
+    public void showLoginPanel() {
 
         connectionJPanel.setVisible(false);
         loginJPanel.setVisible(true);
     }
-
-    void showRoomPanel() {
+    @Override
+    public void showRoomPanel() {
         roomJPanel.setVisible(true);
 
         lobbyJPanel.setVisible(false);
         
 
     }
-
-    void showLobbyPanel() {
+    @Override
+    public void showLobbyPanel() {
         loginJPanel.setVisible(false);
         lobbyJPanel.setVisible(true);
         
-        
-
     }
     
 
-
+    @Override
     public void setRoomsList(List<Room> roomsList) {
         lobbyListModel.clear();
         for(Room room : roomsList){
@@ -142,27 +149,30 @@ public class ClientView extends JPanel implements ClientViewInterface, DrawAreaL
     }
 
     
-    
+    @Override
     public void setCanJoin(boolean b) {
 
         lobbyJPanel.setJoinButtonEnabled(b);
     }
     
+    @Override
     public void setUser(User user){
-//        this.user=user;
         login = user.getLogin();
         
         lobbyJPanel.setLogin(login);
     }
     
+    @Override
     public void setRoomID(int id){
         this.id=id;
     }
-
+    
+    @Override
     public void setUsersListInRoom(List<User> userList) {
         roomJPanel.setUsersList(userList);
     }
     
+    @Override
     public void updateImage(int[] data){
         roomJPanel.updateImage(data);
     }
@@ -171,27 +181,28 @@ public class ClientView extends JPanel implements ClientViewInterface, DrawAreaL
         System.out.println("Narysowane");
         viewListener.drawingChanged(data);
     }
-
-    String getAnswer() {
+    @Override
+    public String getAnswer() {
         return roomJPanel.getAnswer();
     }
-
+    @Override
     public void setDrawingEnabled(boolean drawing) {
         roomJPanel.setDrawing(drawing);
-        roomJPanel.setChatEnabled(false);
     }
-
+    @Override
+    public void setChatEnabled(boolean b) {
+        roomJPanel.setChatEnabled(b);
+    }
+    @Override
     public void setPhrase(String phrase) {
         roomJPanel.setPhrase(phrase);
     }
-
-    void addNewTextMessage(String msg) {
+    @Override
+    public void addNewTextMessage(String msg) {
         roomJPanel.addTextMessage(msg);
     }
 
-    void setChatEnabled(boolean b) {
-        roomJPanel.setChatEnabled(b);
-    }
+    
     
 
 }

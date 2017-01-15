@@ -10,7 +10,6 @@
             <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/GUIpannels/DrawAreaListener.java</file>
             <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/ModelListener.java</file>
             <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/GUIpannels/RoomJPanel.java</file>
-            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/ClientView.java</file>
             <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/GUIpannels/LobbyJPanel.java</file>
             <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/ClientControler.java</file>
             <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/SocketListener.java</file>
@@ -18,6 +17,7 @@
             <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/NoItemSelectedException.java</file>
             <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/ClientViewInterface.java</file>
             <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/GUIpannels/AddingRoomJPanel.java</file>
+            <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/GUIpannels/DrawArea.java</file>
             <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/GUIpannels/LoginJPanel.java</file>
             <file>file:/F:/Git/PROZ%20czat/PROZ.client/Client/src/Client/IPException.java</file>
         </group>

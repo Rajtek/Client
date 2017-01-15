@@ -5,7 +5,11 @@
  */
 package Client;
 
+import Shared.Model.Room;
+import Shared.Model.User;
 import java.awt.event.ActionListener;
+import java.util.List;
+import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -13,11 +17,44 @@ import java.awt.event.ActionListener;
  */
 public interface ClientViewInterface {
 
-    void displayErrorMessage(String errorMessage);
+    public void displayErrorMessage(String errorMessage);
 
-    String getAddress();
+    public String getLogin();
 
-    String getPort();
+    public String getAddress();
 
-    void addSendListener(ActionListener e);
+    public String getPort();
+
+    public int getSelectedRoomID() throws NoItemSelectedException;
+
+    public void addSendListener(ActionListener e);
+    public void addJoinListener(ActionListener listenForJoinButton);
+    public void showLoginPanel();
+
+    public void showRoomPanel();
+    public void setRoomInfo(String s);
+    public void showLobbyPanel();
+
+    public void setRoomsList(List<Room> roomsList);
+
+    public void setCanJoin(boolean b);
+    
+    public void setUser(User user);
+    public void setRoomID(int id);
+    
+    public void setUsersListInRoom(List<User> userList);
+    
+    public void updateImage(int[] data);
+    public void addLoginListener(ActionListener listenForLoginButton);
+    public void drawingChanged(int[] data);
+    
+    public String getAnswer();
+    public void setDrawingEnabled(boolean drawing);
+    public void setChatEnabled(boolean b);
+    public void setPhrase(String phrase);
+    public void addNewTextMessage(String msg);
+    public void setLobbyLogin(String login);
+    public void addListSelectionListener(ListSelectionListener listener);
+    public void setControlerListener(ClientViewListener listener);
+    public void addRoomSendListener(ActionListener listener);
 }

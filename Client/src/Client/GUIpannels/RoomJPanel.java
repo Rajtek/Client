@@ -482,6 +482,7 @@ public class RoomJPanel extends javax.swing.JPanel {
 
     public void setDrawing(boolean drawing) {
         clearButton.setEnabled(drawing);
+        phrasePanel.setVisible(drawing);
         drawArea1.setDrawingEnabled(drawing);
     }
 
